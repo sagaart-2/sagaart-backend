@@ -77,7 +77,6 @@ class ProductCard(models.Model):
         verbose_name="художник",
         related_name="artworks",
     )
-    id_moderator_comment = models.IntegerField()  # models.ForeignKey?
     foto = models.ImageField("Фото", upload_to="product_images/")
     width_painting = models.FloatField(verbose_name="ширина картины")
     heigth_painting = models.FloatField(verbose_name="высота картины")
