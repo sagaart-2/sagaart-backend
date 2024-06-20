@@ -102,3 +102,25 @@ class ProductCard(models.Model):
 
     def __str__(self):
         return f"{self.artist.name_artist} {self.artist.lastname_artist} - {self.type}"
+
+
+class Style(models.Model):
+    """Модель стиля картины."""
+
+    name_style = models.CharField("Название стиля", max_length=50)
+
+    class Meta:
+        verbose_name = "стиль"
+        verbose_name_plural = "стили"
+        ordering = ["-id"]
+
+
+class Category(models.Model):
+    """Модель категории."""
+
+    name_category = models.CharField("Название категории", max_length=50)
+
+    class Meta:
+        verbose_name = "категория"
+        verbose_name_plural = "категории"
+        ordering = ["-id"]
