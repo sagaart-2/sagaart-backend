@@ -1,19 +1,16 @@
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.core.validators import EmailValidator, RegexValidator
 from django.db import models
 
 from apps.products.models import Painter
-from apps.users import choice_classes
+from apps.users import choice_classes, managers
 
 PHONE_REGEX = r"^\+7\s?(\d{3})\s?(\d{3})\s?(\d{2})\s?(\d{2})$"
 
 
-class CustomUser(AbstractUser):
+class CustomUser(AbstractBaseUser, PermissionsMixin):
     """Кастомная модель пользователя."""
 
-    username = models.CharField(
-        "Username пользователя", max_length=150, unique=False
-    )
     phone = models.CharField(
         "Номер телефона",
         max_length=16,
@@ -71,10 +68,15 @@ class CustomUser(AbstractUser):
         choices=choice_classes.UserRightsChoice.choices,
         default="user",
     )
+    is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     create_at = models.DateTimeField("Дата cоздания", auto_now_add=True)
 
+    objects = managers.CustomUserManager()
+
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["username"]
+    REQUIRED_FIELDS = []
 
     class Meta:
         """Конфигурация кастомной модели пользователя."""
