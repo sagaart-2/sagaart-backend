@@ -1,7 +1,7 @@
 from django.db import models
 
 from products.models import Painter, ProductCard
-from choice_classes import PaidChoices
+from orders.choice_classes import PaidChoices
 
 class Order(models.Model):
     id_order = models.AutoField(primary_key=True)
