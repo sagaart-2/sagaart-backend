@@ -1,11 +1,7 @@
 from django.db import models
 
 from products.models import Painter, ProductCard
-
-
-class PaidChoices(models.TextChoices):
-    PAID = ('paid', 'Paid')
-    NOT_PAID = ('not_paid', 'Not Paid')
+from choice_classes import PaidChoices
 
 class Order(models.Model):
     id_order = models.AutoField(primary_key=True)
