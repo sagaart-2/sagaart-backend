@@ -1,6 +1,12 @@
 from rest_framework import serializers
 
-# from apps.api.v1.products.serializers import StyleSerializer
+# from apps.api.v1.products.serializers import (
+#     ArtistSerializer,
+#     CategorySerializer,
+#     StyleSerializer,
+#     SubscriptionSerializer
+# )
+from apps.users.choice_classes import UserRightsChoice
 from apps.users.models import CustomUser
 
 
@@ -10,6 +16,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
     # favorite_style = StyleSerializer(many=True)
     # favorite_category = CategorySerializer(many=True)
     # favorite_artist = ArtistSerializer(many=True)
+    # subscription = SubscriptionSerializer(many=True)
 
     class Meta:
         model = CustomUser
@@ -29,13 +36,17 @@ class CustomUserSerializer(serializers.ModelSerializer):
         )
 
 
-class UpdateCustomUserSerializer(serializers.ModelSerializer):
+class CreateCustomUserSerializer(serializers.ModelSerializer):
     """Сериализатор для редактирования профиля пользователя."""
 
+    user_rights = serializers.ChoiceField(
+        choices=UserRightsChoice, default="user"
+    )
     password = serializers.CharField(write_only=True)
     # favorite_style = StyleSerializer(many=True)
     # favorite_category = CategorySerializer(many=True)
     # favorite_artist = ArtistSerializer(many=True)
+    # subscription = SubscriptionSerializer(many=True)
 
     class Meta:
         model = CustomUser
@@ -51,7 +62,30 @@ class UpdateCustomUserSerializer(serializers.ModelSerializer):
             # "favorite_category",
             # "favorite_artist",
             # "subscription",
+            "user_rights",
         )
+
+    def to_representation(self, instance):
+        """Представление пользователя."""
+        serializer = CustomUserSerializer(
+            instance, context={"request": self.context.get("request")}
+        )
+
+        return serializer.data
+
+    def create(self, validated_data):
+        """Создать профиль пользователя."""
+        user = CustomUser(
+            phone=validated_data["phone"],
+            email=validated_data["email"],
+            first_name=validated_data["first_name"],
+            last_name=validated_data["last_name"],
+            surname=validated_data["surname"],
+        )
+        user.set_password(validated_data["password"])
+        user.save()
+
+        return user
 
     # @staticmethod
     # def add_favorite_style(custom_user, favorite_style):
@@ -90,7 +124,7 @@ class UpdateCustomUserSerializer(serializers.ModelSerializer):
             "last_name", instance.last_name
         )
         instance.surname = validated_data.get("surname", instance.surname)
-        instance.set_password(validated_data["password"])
+        # instance.set_password(validated_data["password"])
 
         # self.add_favorite_style(instance, favorite_style)
         # self.add_favorite_category(instance, favorite_category)

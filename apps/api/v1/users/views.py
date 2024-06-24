@@ -1,32 +1,20 @@
-from rest_framework import mixins, permissions, viewsets
+from rest_framework import permissions, viewsets
 
 from apps.api.v1.users.serializers import (
+    CreateCustomUserSerializer,
     CustomUserSerializer,
-    UpdateCustomUserSerializer,
 )
 from apps.users.models import CustomUser
 
 
-class ListRetrievePatchDeleteViewSet(
-    mixins.DestroyModelMixin,
-    mixins.ListModelMixin,
-    mixins.RetrieveModelMixin,
-    mixins.UpdateModelMixin,
-    viewsets.GenericViewSet,
-):
-    """Вьюсет, предоставляеющий действия: list, retrieve, update, destroy."""
-
-    pass
-
-
-class UsersMeView(viewsets.ModelViewSet):
+class CustomUserViewSet(viewsets.ModelViewSet):
     """Вьюсет, позволяющий просматривать, изменять и удалять свой профиль."""
 
     # queryset = CustomUser.objects.select_related("author").prefetch_related(
     #     "tags", "ingredients"
     # )
     queryset = CustomUser.objects.all()
-    # http_method_names = ["get", "patch", "delete"]
+    http_method_names = ["get", "post", "patch", "delete"]
     # permission_classes = [IsAuthorOrReadOnly]
 
     def get_serializer_class(self):
@@ -34,5 +22,4 @@ class UsersMeView(viewsets.ModelViewSet):
 
         if self.request.method in permissions.SAFE_METHODS:
             return CustomUserSerializer
-
-        return UpdateCustomUserSerializer
+        return CreateCustomUserSerializer

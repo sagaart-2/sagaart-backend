@@ -1,9 +1,7 @@
 from django.urls import include, path
 from rest_framework import routers
 
-from apps.api.v1.users import CustomUserViewSet
-
-app_name = "api_v1_users"
+from apps.api.v1.users.views import CustomUserViewSet
 
 router = routers.DefaultRouter()
 
