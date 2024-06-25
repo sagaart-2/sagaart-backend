@@ -67,6 +67,17 @@ class Painter(models.Model):
         return f"{self.name_artist} {self.lastname_artist}"
 
 
+class Style(models.Model):
+    """Модель стиля картины."""
+
+    name_style = models.CharField("Название стиля", max_length=50)
+
+    class Meta:
+        verbose_name = "стиль"
+        verbose_name_plural = "стили"
+        ordering = ["-id"]
+
+
 class ProductCard(models.Model):
     """Модель карточки товара."""
 
@@ -82,7 +93,12 @@ class ProductCard(models.Model):
     heigth_painting = models.FloatField(verbose_name="высота картины")
     type = models.CharField("Тип произведения искусства", max_length=100)
     genre = models.CharField("Жанр", max_length=100)
-    style = models.CharField("Стиль", max_length=100)
+    style = models.ForeignKey(
+        Style,
+        on_delete=models.CASCADE,
+        verbose_name="Стиль",
+        related_name="product_cards",
+    )
     material_painting = models.CharField("Материал", max_length=100)
     material_tablet = models.CharField("Материал подложки", max_length=100)
     painting_data_create = models.DateField(
@@ -102,17 +118,6 @@ class ProductCard(models.Model):
 
     def __str__(self):
         return f"{self.artist.name_artist} {self.artist.lastname_artist} - {self.type}"
-
-
-class Style(models.Model):
-    """Модель стиля картины."""
-
-    name_style = models.CharField("Название стиля", max_length=50)
-
-    class Meta:
-        verbose_name = "стиль"
-        verbose_name_plural = "стили"
-        ordering = ["-id"]
 
 
 class Category(models.Model):
