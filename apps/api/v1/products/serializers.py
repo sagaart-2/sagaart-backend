@@ -58,7 +58,10 @@ class StyleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Style
-        fields = ("name_style",)
+        fields = (
+            "id",
+            "name_style",
+        )
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -66,4 +69,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ("name_category",)
+        fields = (
+            "id",
+            "name_category",
+        )

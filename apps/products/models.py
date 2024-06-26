@@ -11,7 +11,7 @@ class Painter(models.Model):
     gender = models.CharField(
         "Пол", max_length=50, choices=choice_classes.GenderChoice.choices
     )
-    date_of_birth = models.DateTimeField("Дата рождения")
+    date_of_birth = models.DateField("Дата рождения")
     city_of_birth = models.CharField("Город рождения", max_length=100)
     сity_of_residence = models.CharField("Город проживания", max_length=100)
     education = models.CharField(
@@ -77,6 +77,9 @@ class Style(models.Model):
         verbose_name_plural = "стили"
         ordering = ["-id"]
 
+    def __str__(self):
+        return self.name_style
+
 
 class ProductCard(models.Model):
     """Модель карточки товара."""
@@ -116,7 +119,10 @@ class ProductCard(models.Model):
         ordering = ["-id"]
 
     def __str__(self):
-        return f"{self.artist.name_artist} {self.artist.lastname_artist} - {self.type}"
+        return (
+            f"{self.artist.name_artist} "
+            f"{self.artist.lastname_artist} - {self.type}"
+        )
 
 
 class Category(models.Model):
@@ -128,3 +134,6 @@ class Category(models.Model):
         verbose_name = "категория"
         verbose_name_plural = "категории"
         ordering = ["-id"]
+
+    def __str__(self):
+        return self.name_category
