@@ -1,9 +1,9 @@
 from rest_framework import serializers
 
 from apps.api.v1.products.serializers import (  # SubscriptionSerializer
+    CategorySerializer,
     PainterSerializer,
-    RepresentationCategorySerializer,
-    RepresentationStyleSerializer,
+    StyleSerializer,
 )
 from apps.products.models import Category, Painter, Style
 from apps.users.choice_classes import UserRightsChoice
@@ -13,8 +13,8 @@ from apps.users.models import CustomUser
 class CustomUserSerializer(serializers.ModelSerializer):
     """Сериализатор для отображения профиля пользователя."""
 
-    favorite_style = RepresentationStyleSerializer(many=True)
-    favorite_category = RepresentationCategorySerializer(many=True)
+    favorite_style = StyleSerializer(many=True)
+    favorite_category = CategorySerializer(many=True)
     favorite_artist = PainterSerializer(many=True)
     # subscription = SubscriptionSerializer(many=True)
 

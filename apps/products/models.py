@@ -11,7 +11,7 @@ class Painter(models.Model):
     gender = models.CharField(
         "Пол", max_length=50, choices=choice_classes.GenderChoice.choices
     )
-    date_of_birth = models.DateTimeField("Дата рождения")
+    date_of_birth = models.DateField("Дата рождения")
     city_of_birth = models.CharField("Город рождения", max_length=100)
     сity_of_residence = models.CharField("Город проживания", max_length=100)
     education = models.CharField(
