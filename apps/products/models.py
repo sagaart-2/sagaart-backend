@@ -77,6 +77,9 @@ class Style(models.Model):
         verbose_name_plural = "стили"
         ordering = ["-id"]
 
+    def __str__(self):
+        return self.name_style
+
 
 class ProductCard(models.Model):
     """Модель карточки товара."""
@@ -117,7 +120,10 @@ class ProductCard(models.Model):
         ordering = ["-id_card_product"]
 
     def __str__(self):
-        return f"{self.artist.name_artist} {self.artist.lastname_artist} - {self.type}"
+        return (
+            f"{self.artist.name_artist} "
+            f"{self.artist.lastname_artist} - {self.type}"
+        )
 
 
 class Category(models.Model):
@@ -129,3 +135,6 @@ class Category(models.Model):
         verbose_name = "категория"
         verbose_name_plural = "категории"
         ordering = ["-id"]
+
+    def __str__(self):
+        return self.name_category

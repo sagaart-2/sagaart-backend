@@ -19,7 +19,10 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         validators=[
             RegexValidator(
                 regex=PHONE_REGEX,
-                message="Номер телефона должен быть в формате '+7 999 999 99 99'.",
+                message=(
+                    "Номер телефона должен быть "
+                    "в формате '+7 999 999 99 99'."
+                ),
                 code="invalid_phone_number",
             )
         ],
@@ -45,13 +48,22 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         help_text="Введите отчество, не более 150 символов",
     )
     favorite_style = models.ManyToManyField(
-        Style, related_name="users_like", verbose_name="Любимые стили"
+        Style,
+        blank=True,
+        related_name="users_like",
+        verbose_name="Любимые стили",
     )
     favorite_category = models.ManyToManyField(
-        Category, related_name="users_like", verbose_name="Любимые категории"
+        Category,
+        blank=True,
+        related_name="users_like",
+        verbose_name="Любимые категории",
     )
     favorite_artist = models.ManyToManyField(
-        Painter, related_name="users_like", verbose_name="Любимые художники"
+        Painter,
+        blank=True,
+        related_name="users_like",
+        verbose_name="Любимые художники",
     )
     # subscription = models.ManyToManyField(
     #     Subscription,

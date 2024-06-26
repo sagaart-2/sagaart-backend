@@ -61,9 +61,31 @@ class StyleSerializer(serializers.ModelSerializer):
         fields = ("name_style",)
 
 
+class RepresentationStyleSerializer(serializers.ModelSerializer):
+    """Сериализатор для отображения объекта Style в объекте CustomUser."""
+
+    class Meta:
+        model = Style
+        fields = (
+            "id",
+            "name_style",
+        )
+
+
 class CategorySerializer(serializers.ModelSerializer):
     """Сериализатор для работы с объектом Category."""
 
     class Meta:
         model = Category
         fields = ("name_category",)
+
+
+class RepresentationCategorySerializer(serializers.ModelSerializer):
+    """Сериализатор для отображения объекта Category в объекте CustomUser."""
+
+    class Meta:
+        model = Category
+        fields = (
+            "id",
+            "name_category",
+        )
