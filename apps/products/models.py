@@ -81,7 +81,6 @@ class Style(models.Model):
 class ProductCard(models.Model):
     """Модель карточки товара."""
 
-    id_card_product = models.AutoField(primary_key=True)
     artist = models.ForeignKey(
         "Painter",
         on_delete=models.CASCADE,
@@ -114,7 +113,7 @@ class ProductCard(models.Model):
     class Meta:
         verbose_name = "карточка товара"
         verbose_name_plural = "карточки товаров"
-        ordering = ["-id_card_product"]
+        ordering = ["-id"]
 
     def __str__(self):
         return f"{self.artist.name_artist} {self.artist.lastname_artist} - {self.type}"
