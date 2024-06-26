@@ -9,7 +9,7 @@ class ProductCardSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductCard
         fields = (
-            "id_card_product",
+            "id",
             "artist",
             "foto",
             "width_painting",

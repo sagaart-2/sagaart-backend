@@ -11,7 +11,7 @@ class PainterAdmin(admin.ModelAdmin):
 
 @admin.register(ProductCard)
 class ProductCardAdmin(admin.ModelAdmin):
-    list_display = ("artist", "painting_data_create")
+    list_display = ("id", "artist", "painting_data_create")
     search_fields = ("artist__lastname_artist", "painting_data_create")
 
 
