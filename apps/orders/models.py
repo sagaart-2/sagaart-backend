@@ -5,20 +5,33 @@ from apps.products.models import Painter, ProductCard
 
 
 class Order(models.Model):
-    id_order = models.AutoField(primary_key=True)
+    """Модель заказов."""
+
     id_seller = models.ForeignKey(
-        Painter, on_delete=models.CASCADE, related_name="orders"
+        Painter,
+        on_delete=models.CASCADE,
+        verbose_name="Id продавца",
+        related_name="orders",
     )
     id_cardproduct = models.ForeignKey(
-        ProductCard, on_delete=models.CASCADE, related_name="orders"
+        ProductCard,
+        on_delete=models.CASCADE,
+        verbose_name="Id карточки товара",
+        related_name="orders",
     )
     total_price = models.DecimalField(
         verbose_name="Цена", max_digits=10, decimal_places=2
     )
     status = models.CharField(
-        "Статус", max_length=20, choices=PaidChoices.choices
+        verbose_name="Статус", max_length=20, choices=PaidChoices.choices
     )
-    ceate_at = models.DateTimeField(auto_now_add=True)
+    create_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "заказ"
+        verbose_name_plural = "заказы"
+        ordering = ["-id"]
 
     def __str__(self):
-        return f"Order {self.id_order}"
+        return f"Order {self.id}"
+ 
