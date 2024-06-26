@@ -5,6 +5,6 @@ from apps.api.v1.users.views import CustomUserViewSet
 
 router = routers.DefaultRouter()
 
-router.register("users", CustomUserViewSet)
+router.register("", CustomUserViewSet)
 
 urlpatterns = [path("", include(router.urls))]
