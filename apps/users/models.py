@@ -2,7 +2,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.core.validators import EmailValidator, RegexValidator
 from django.db import models
 
-from apps.products.models import Category, Painter, Style
+from apps.products.models import Artist, Category, Style
 from apps.users import choice_classes, managers
 
 PHONE_REGEX = r"^\+7\s?(\d{3})\s?(\d{3})\s?(\d{2})\s?(\d{2})$"
@@ -60,7 +60,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         verbose_name="Любимые категории",
     )
     favorite_artist = models.ManyToManyField(
-        Painter,
+        Artist,
         blank=True,
         related_name="users_like",
         verbose_name="Любимые художники",

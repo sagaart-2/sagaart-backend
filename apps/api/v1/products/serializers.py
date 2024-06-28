@@ -1,38 +1,61 @@
 from rest_framework import serializers
 
-from apps.products.models import Category, Painter, ProductCard, Style
+from apps.products.models import (
+    Artist,
+    Category,
+    Exhibition,
+    GroupShow,
+    ProductCard,
+    SoloShow,
+    Style,
+)
 
 
-class ProductCardSerializer(serializers.ModelSerializer):
-    """Сериализатор для работы с объектом ProductCard."""
-
-    class Meta:
-        model = ProductCard
-        fields = (
-            "id",
-            "artist",
-            "foto",
-            "width_painting",
-            "heigth_painting",
-            "type",
-            "genre",
-            "material_painting",
-            "material_tablet",
-            "painting_data_create",
-            "avg_cost_of_work",
-            "desired_selling_price",
-        )
-
-
-class PainterSerializer(serializers.ModelSerializer):
-    """Серилизатор для работы с объектом Painter."""
+class ExhibitionSerializer(serializers.ModelSerializer):
+    """Сериализатор для работы с объектом Exhibition."""
 
     class Meta:
-        model = Painter
+        model = Exhibition
+        fields = ["id", "artist", "year", "title", "place"]
+
+
+class SoloShowSerializer(ExhibitionSerializer):
+    """Серилизатор для работы с объектом SoloShow."""
+
+    class Meta:
+        model = SoloShow
+        fields = ExhibitionSerializer.Meta.fields
+
+
+class GroupShowSerializer(ExhibitionSerializer):
+    """Серилизатор для работы с объектом GroupShow."""
+
+    class Meta:
+        model = GroupShow
+        fields = ExhibitionSerializer.Meta.fields
+
+
+class ArtistSerializer(serializers.ModelSerializer):
+    """Серилизатор для работы с объектом Artist."""
+
+    personal_style = serializers.CharField(source="get_personal_style_display")
+    solo_shows = SoloShowSerializer(many=True, read_only=True)
+    group_shows = GroupShowSerializer(many=True, read_only=True)
+    collected_by_private_collectors = serializers.BooleanField()
+    collected_by_major_institutions = serializers.BooleanField()
+    date_of_birth = serializers.DateField()
+    create_at = serializers.DateTimeField(format="%Y-%m-%dT%H:%M:%S.%fZ")
+
+    class Meta:
+        model = Artist
         fields = (
             "id",
-            "name_artist",
-            "lastname_artist",
+            "name",
+            "lastname",
+            "photo",
+            "bio",
+            "phone",
+            "email",
             "gender",
             "date_of_birth",
             "city_of_birth",
@@ -42,14 +65,13 @@ class PainterSerializer(serializers.ModelSerializer):
             "teaching_experience",
             "personal_style",
             "solo_shows",
-            "solo_shows_gallery",
             "group_shows",
-            "group_shows_gallery",
-            "group_shows_artist",
             "collected_by_private_collectors",
             "collected_by_major_institutions",
             "industry_award",
             "social",
+            "password",
+            "create_at",
         )
 
 
@@ -72,4 +94,35 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "name_category",
+        )
+
+
+class ProductCardSerializer(serializers.ModelSerializer):
+    """Сериализатор для работы с объектом ProductCard."""
+
+    artist = ArtistSerializer()
+    category = CategorySerializer()
+    style = StyleSerializer()
+
+    class Meta:
+        model = ProductCard
+        fields = (
+            "id",
+            "artist",
+            "photo",
+            "title",
+            "description",
+            "style",
+            "category",
+            "width",
+            "heigth",
+            "genre",
+            "material_painting",
+            "material_tablet",
+            "year_create",
+            "avg_cost_of_work",
+            "price",
+            "desired_price",
+            "unique",
+            "investment_attractiveness",
         )

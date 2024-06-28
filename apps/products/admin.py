@@ -1,18 +1,26 @@
 from django.contrib import admin
 
-from apps.products.models import Category, Painter, ProductCard, Style
+from apps.products.models import (
+    Artist,
+    Category,
+    Exhibition,
+    GroupShow,
+    ProductCard,
+    SoloShow,
+    Style,
+)
 
 
-@admin.register(Painter)
-class PainterAdmin(admin.ModelAdmin):
-    list_display = ("id", "lastname_artist", "date_of_birth")
-    search_fields = ("lastname_artist", "date_of_birth")
+@admin.register(Artist)
+class ArtistAdmin(admin.ModelAdmin):
+    list_display = ("id", "lastname", "date_of_birth")
+    search_fields = ("lastname", "date_of_birth")
 
 
 @admin.register(ProductCard)
 class ProductCardAdmin(admin.ModelAdmin):
-    list_display = ("id", "artist", "painting_data_create")
-    search_fields = ("artist__lastname_artist", "painting_data_create")
+    list_display = ("id", "artist", "year_create")
+    search_fields = ("artist__lastname", "year_create")
 
 
 @admin.register(Style)
@@ -25,3 +33,20 @@ class StyleAdmin(admin.ModelAdmin):
 class Category(admin.ModelAdmin):
     list_display = ("id", "name_category")
     search_fields = ("id", "name_category")
+
+
+@admin.register(Exhibition)
+class ExhibitionAdmin(admin.ModelAdmin):
+    list_display = ("title", "artist", "year", "place")
+    search_fields = ("title", "artist__name", "place")
+    list_filter = ("year", "place")
+
+
+@admin.register(SoloShow)
+class SoloShowAdmin(ExhibitionAdmin):
+    pass
+
+
+@admin.register(GroupShow)
+class GroupShowAdmin(ExhibitionAdmin):
+    pass
