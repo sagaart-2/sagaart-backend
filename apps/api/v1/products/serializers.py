@@ -16,7 +16,7 @@ class ExhibitionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Exhibition
-        fields = ["id", "artist", "year", "title", "place"]
+        fields = ["id", "year", "title", "place"]
 
 
 class SoloShowSerializer(ExhibitionSerializer):
@@ -44,7 +44,9 @@ class ArtistSerializer(serializers.ModelSerializer):
     collected_by_private_collectors = serializers.BooleanField()
     collected_by_major_institutions = serializers.BooleanField()
     date_of_birth = serializers.DateField()
-    create_at = serializers.DateTimeField(format="%Y-%m-%dT%H:%M:%S.%fZ")
+    create_at = serializers.DateTimeField(
+        format="%Y-%m-%dT%H:%M:%S.%fZ", read_only=True
+    )
 
     class Meta:
         model = Artist
@@ -73,6 +75,13 @@ class ArtistSerializer(serializers.ModelSerializer):
             "password",
             "create_at",
         )
+
+    def update(self, instance, validated_data):
+        password = validated_data.pop("password", None)
+        if password:
+            instance.password = password
+            instance.save(update_fields=["password"])
+        return super().update(instance, validated_data)
 
 
 class StyleSerializer(serializers.ModelSerializer):

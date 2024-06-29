@@ -37,8 +37,8 @@ class Category(admin.ModelAdmin):
 
 @admin.register(Exhibition)
 class ExhibitionAdmin(admin.ModelAdmin):
-    list_display = ("title", "artist", "year", "place")
-    search_fields = ("title", "artist__name", "place")
+    list_display = ("title", "year", "place")
+    search_fields = ("title", "place")
     list_filter = ("year", "place")
 
 

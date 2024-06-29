@@ -17,7 +17,9 @@ from apps.products.models import Artist, Category, ProductCard, Style
 class ProductCardViewSet(CreateListPartialUpdateRetrieve):
     """Вьюсет для обработки запросов к эндпоинтам ProductCard."""
 
-    queryset = ProductCard.objects.all()
+    queryset = ProductCard.objects.select_related(
+        "artist", "category", "style"
+    )
     serializer_class = ProductCardSerializer
 
 

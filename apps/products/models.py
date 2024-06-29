@@ -90,9 +90,6 @@ class Artist(models.Model):
 class Exhibition(models.Model):
     """Модель выставок."""
 
-    artist = models.ForeignKey(
-        Artist, on_delete=models.CASCADE, verbose_name="Художник"
-    )
     year = models.IntegerField("Год")
     title = models.CharField("Название", max_length=200)
     place = models.CharField("Место", max_length=100)
