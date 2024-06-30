@@ -1,11 +1,11 @@
 from rest_framework import serializers
 
 from apps.api.v1.products.serializers import (  # SubscriptionSerializer
+    ArtistSerializer,
     CategorySerializer,
-    PainterSerializer,
     StyleSerializer,
 )
-from apps.products.models import Category, Painter, Style
+from apps.products.models import Artist, Category, Style
 from apps.users.choice_classes import UserRightsChoice
 from apps.users.models import CustomUser
 
@@ -15,7 +15,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
     favorite_style = StyleSerializer(many=True)
     favorite_category = CategorySerializer(many=True)
-    favorite_artist = PainterSerializer(many=True)
+    favorite_artist = ArtistSerializer(many=True)
     # subscription = SubscriptionSerializer(many=True)
 
     class Meta:
@@ -50,7 +50,7 @@ class CreateCustomUserSerializer(serializers.ModelSerializer):
         queryset=Category.objects.all(), many=True, required=False
     )
     favorite_artist = serializers.PrimaryKeyRelatedField(
-        queryset=Painter.objects.all(), many=True, required=False
+        queryset=Artist.objects.all(), many=True, required=False
     )
     # subscription = SubscriptionSerializer(many=True)
 

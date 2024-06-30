@@ -1,8 +1,8 @@
 from rest_framework import status
 
 from apps.api.v1.products.serializers import (
+    ArtistSerializer,
     CategorySerializer,
-    PainterSerializer,
     ProductCardSerializer,
     StyleSerializer,
 )
@@ -11,13 +11,15 @@ from apps.api.v1.products.viewsets import (
     CreateRetrievePartialUpdate,
     ListRetrieveDelete,
 )
-from apps.products.models import Category, Painter, ProductCard, Style
+from apps.products.models import Artist, Category, ProductCard, Style
 
 
 class ProductCardViewSet(CreateListPartialUpdateRetrieve):
     """Вьюсет для обработки запросов к эндпоинтам ProductCard."""
 
-    queryset = ProductCard.objects.all()
+    queryset = ProductCard.objects.select_related(
+        "artist", "category", "style"
+    )
     serializer_class = ProductCardSerializer
 
 
@@ -49,8 +51,8 @@ class CategoryViewSet(ListRetrieveDelete):
             return status.HTTP_405_METHOD_NOT_ALLOWED
 
 
-class PainterViewSet(CreateRetrievePartialUpdate):
+class ArtistViewSet(CreateRetrievePartialUpdate):
     """Вьюсет для обработки запросов к эндпоинтам Painters."""
 
-    queryset = Painter.objects.all()
-    serializer_class = PainterSerializer
+    queryset = Artist.objects.all()
+    serializer_class = ArtistSerializer

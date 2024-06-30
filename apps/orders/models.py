@@ -1,14 +1,14 @@
 from django.db import models
 
 from apps.orders.choice_classes import PaidChoices
-from apps.products.models import Painter, ProductCard
+from apps.products.models import Artist, ProductCard
 
 
 class Order(models.Model):
     """Модель заказов."""
 
     id_seller = models.ForeignKey(
-        Painter,
+        Artist,
         on_delete=models.CASCADE,
         verbose_name="Id продавца",
         related_name="orders",
@@ -34,4 +34,3 @@ class Order(models.Model):
 
     def __str__(self):
         return f"Order {self.id}"
- 
