@@ -28,7 +28,8 @@ class Artist(models.Model):
     email = models.EmailField("Почта", unique=True)
     date_of_birth = models.DateField("Дата рождения")
     city_of_birth = models.CharField("Город рождения", max_length=100)
-    сity_of_residence = models.CharField("Город проживания", max_length=100)
+    city_of_residence = models.CharField("Город проживания", max_length=100)
+    country = models.CharField("Страна рождения", max_length=100)
     education = models.CharField(
         "Образование", max_length=200, null=True, blank=True
     )
@@ -93,6 +94,8 @@ class Exhibition(models.Model):
     year = models.IntegerField("Год")
     title = models.CharField("Название", max_length=200)
     place = models.CharField("Место", max_length=100)
+    city = models.CharField("Город", max_length=100)
+    country = models.CharField("Страна", max_length=100)
 
     class Meta:
         verbose_name = "выставка"
@@ -164,7 +167,7 @@ class ProductCard(models.Model):
         verbose_name="Стиль",
         related_name="product_cards",
     )
-    material_painting = models.CharField("Материал", max_length=100)
+    material_work = models.CharField("Материал", max_length=100)
     material_tablet = models.CharField("Материал подложки", max_length=100)
     category = models.ForeignKey(
         Category, on_delete=models.CASCADE, verbose_name="Категория"
@@ -191,3 +194,75 @@ class ProductCard(models.Model):
 
     def __str__(self):
         return f"{self.artist.name} " f"{self.artist.lastname} - {self.genre}"
+
+
+# class Bid(models.Model):
+#     """Модель заявки."""
+
+#     # Поля из модели Artist
+#     artist_name = models.CharField("Имя художника", max_length=50)
+#     artist_lastname = models.CharField("Фамилия художника", max_length=50)
+#     gender = models.CharField(
+#         "Пол", max_length=50, choices=choice_classes.GenderChoice.choices
+#     )
+#     сity_of_residence = models.CharField("Город проживания", max_length=100)
+#     solo_shows = models.ManyToManyField(
+#         "SoloShow",
+#         verbose_name="информация о сольных выставках",
+#         blank=True,
+#         related_name="bids",
+#     )
+#     group_shows = models.ManyToManyField(
+#         "GroupShow",
+#         verbose_name="информация о групповых галереях",
+#         blank=True,
+#         related_name="bids",
+#     )
+
+#     # Поля из модели ProductCard
+#     category = models.ForeignKey(
+#         Category, on_delete=models.CASCADE, verbose_name="Категория"
+#     )
+#     year_create = models.IntegerField(verbose_name="Год создания картины")
+#     height = models.FloatField(verbose_name="высота картины")
+#     width = models.FloatField(verbose_name="ширина картины")
+#     material_work = models.CharField("Материал", max_length=100)
+#     material_tablet = models.CharField("Материал подложки", max_length=100)
+
+#     # Дополнительные поля
+#     count_title = models.IntegerField("Количество вхождений названия", default=0)
+#     count_artist = models.IntegerField("Количество вхождений имени художника", default=0)
+#     age = models.IntegerField("Возраст художника", null=True, blank=True)
+#     is_alive = models.BooleanField("Живой художник", default=True)
+
+#     def save(self, *args, **kwargs):
+#         # Пример логики для расчета возраста художника
+#         if self.artist_name and self.artist_lastname:
+#             try:
+#                 artist = Artist.objects.get(name=self.artist_name, lastname=self.artist_lastname)
+#                 self.age = (timezone.now().date() - artist.date_of_birth).days // 365
+#             except Artist.DoesNotExist:
+#                 self.age = None
+#         super().save(*args, **kwargs)
+
+
+class Bid(models.Model):
+    """Модель заявки."""
+
+    product_card = models.ForeignKey(
+        ProductCard,
+        on_delete=models.CASCADE,
+        verbose_name="Карточка товара",
+        related_name="bid",
+    )
+    price = models.DecimalField(
+        "Прогнозируемая цена", max_digits=10, decimal_places=2
+    )
+
+    class Meta:
+        verbose_name = "заявка"
+        verbose_name_plural = "заявки"
+        ordering = ["-id"]
+
+    def __str__(self):
+        return f"Цена товара {self.product_card.title} - {self.price}"

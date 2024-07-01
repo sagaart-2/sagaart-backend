@@ -2,6 +2,7 @@ from django.contrib import admin
 
 from apps.products.models import (
     Artist,
+    Bid,
     Category,
     Exhibition,
     GroupShow,
@@ -50,3 +51,9 @@ class SoloShowAdmin(ExhibitionAdmin):
 @admin.register(GroupShow)
 class GroupShowAdmin(ExhibitionAdmin):
     pass
+
+
+@admin.register(Bid)
+class BidAdmin(admin.ModelAdmin):
+    list_display = ("id", "product_card", "price")
+    search_fields = ("product_card",)

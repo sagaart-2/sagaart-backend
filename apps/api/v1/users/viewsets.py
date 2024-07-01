@@ -9,6 +9,6 @@ class CreateListPartialUpdateRetrieve(
     mixins.RetrieveModelMixin,
     viewsets.GenericViewSet,
 ):
-    """Вьюсет, предоставляющий: get, post, patch, delete."""
+    """Вьюсет, предоставляющий: get, patch, delete."""
 
-    http_method_names = ["get", "post", "patch", "delete", "head", "options"]
+    http_method_names = ["get", "patch", "delete", "head", "options"]

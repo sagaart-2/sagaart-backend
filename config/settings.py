@@ -86,6 +86,12 @@ DATABASES = {
         "PORT": os.getenv("DB_PORT"),
     }
 }
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
 
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -123,3 +129,5 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "users.CustomUser"
+
+CATBOOST_ROOT = BASE_DIR / "catboost_v1.json"

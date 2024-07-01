@@ -37,3 +37,13 @@ class CreateRetrievePartialUpdate(
     """Вьюсет предоставляющий: get, post, patch, delete."""
 
     http_method_names = ["get", "post", "patch", "delete", "head", "options"]
+
+
+class CreateRetrieve(
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    viewsets.GenericViewSet,
+):
+    """Вьюсет предоставляющий: get, post."""
+
+    http_method_names = ["get", "post"]
