@@ -14,12 +14,20 @@ from apps.products.models import (  # Bid,
 # from apps.api.v1.products import Paintings_v2
 
 
+class ExhibitionArtistSerializer(serializers.ModelSerializer):
+    """Сериализатор для работы с объектом Exhibition."""
+
+    class Meta:
+        model = Exhibition
+        fields = ["title", "place", "city", "country", "year"]
+
+
 class ExhibitionSerializer(serializers.ModelSerializer):
     """Сериализатор для работы с объектом Exhibition."""
 
     class Meta:
         model = Exhibition
-        fields = ["id", "year", "title", "place"]
+        fields = ["id", "title", "place", "city", "country", "year"]
 
 
 class SoloShowSerializer(ExhibitionSerializer):
@@ -42,8 +50,10 @@ class ArtistSerializer(serializers.ModelSerializer):
     """Серилизатор для работы с объектом Artist."""
 
     personal_style = serializers.CharField(source="get_personal_style_display")
-    solo_shows = SoloShowSerializer(many=True, read_only=True)
-    group_shows = GroupShowSerializer(many=True, read_only=True)
+    # solo_shows = SoloShowSerializer(many=True, read_only=True)
+    # group_shows = GroupShowSerializer(many=True, read_only=True)
+    solo_shows = ExhibitionArtistSerializer(many=True)
+    group_shows = ExhibitionArtistSerializer(many=True)
     collected_by_private_collectors = serializers.BooleanField()
     collected_by_major_institutions = serializers.BooleanField()
     date_of_birth = serializers.DateField()
@@ -64,7 +74,8 @@ class ArtistSerializer(serializers.ModelSerializer):
             "gender",
             "date_of_birth",
             "city_of_birth",
-            "сity_of_residence",
+            "country",
+            "city_of_residence",
             "education",
             "art_education",
             "teaching_experience",
@@ -78,13 +89,89 @@ class ArtistSerializer(serializers.ModelSerializer):
             "password",
             "create_at",
         )
+        extra_kwargs = {"password": {"write_only": True}}
+
+    def to_representation(self, instance):
+        """Представление пользователя."""
+
+        data = super().to_representation(instance)
+        data["solo_shows"] = SoloShowSerializer(
+            instance.solo_shows.all(), many=True
+        ).data
+        data["group_shows"] = GroupShowSerializer(
+            instance.group_shows.all(), many=True
+        ).data
+
+        return data
+
+    @staticmethod
+    def add_solo_shows(artist, solo_shows):
+        """Добавить в профиль художника сольные выставки."""
+
+        solo_shows_titles = [solo_show["title"] for solo_show in solo_shows]
+        solo_shows_db = SoloShow.objects.filter(title__in=solo_shows_titles)
+        solo_shows_titles_db = [solo_show.title for solo_show in solo_shows_db]
+        solo_shows_titles_new = set(solo_shows_titles).difference(
+            set(solo_shows_titles_db)
+        )
+
+        solo_shows_new = []
+        for solo_show in solo_shows:
+            if solo_show["title"] in solo_shows_titles_new:
+                solo_shows_new.append(SoloShow.objects.create(**solo_show))
+            else:
+                solo_shows_new.append(
+                    solo_shows_db.get(title=solo_show["title"])
+                )
+
+        artist.solo_shows.set(solo_shows_new)
+
+    @staticmethod
+    def add_group_shows(artist, group_shows):
+        """Добавить в профиль художника групповые выставки."""
+
+        group_shows_titles = [
+            group_show["title"] for group_show in group_shows
+        ]
+        group_shows_db = GroupShow.objects.filter(title__in=group_shows_titles)
+        group_shows_titles_db = [
+            group_show.title for group_show in group_shows_db
+        ]
+        group_shows_titles_new = set(group_shows_titles).difference(
+            set(group_shows_titles_db)
+        )
+
+        group_shows_new = []
+        for group_show in group_shows:
+            if group_show["title"] in group_shows_titles_new:
+                group_shows_new.append(GroupShow.objects.create(**group_show))
+            else:
+                group_shows_new.append(
+                    group_shows_db.get(title=group_show["title"])
+                )
+
+        artist.group_shows.set(group_shows_new)
 
     def update(self, instance, validated_data):
+        solo_shows_data = validated_data.pop("solo_shows", [])
+        group_shows_data = validated_data.pop("group_shows", [])
+
+        if solo_shows_data:
+            self.add_solo_shows(instance, solo_shows_data)
+
+        if group_shows_data:
+            self.add_group_shows(instance, group_shows_data)
+
         password = validated_data.pop("password", None)
         if password:
             instance.password = password
             instance.save(update_fields=["password"])
-        return super().update(instance, validated_data)
+
+        instance = super().update(instance, validated_data)
+
+        instance.save()
+
+        return instance
 
 
 class StyleSerializer(serializers.ModelSerializer):

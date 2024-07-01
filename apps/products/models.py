@@ -28,7 +28,8 @@ class Artist(models.Model):
     email = models.EmailField("Почта", unique=True)
     date_of_birth = models.DateField("Дата рождения")
     city_of_birth = models.CharField("Город рождения", max_length=100)
-    сity_of_residence = models.CharField("Город проживания", max_length=100)
+    city_of_residence = models.CharField("Город проживания", max_length=100)
+    country = models.CharField("Страна рождения", max_length=100)
     education = models.CharField(
         "Образование", max_length=200, null=True, blank=True
     )
@@ -93,6 +94,8 @@ class Exhibition(models.Model):
     year = models.IntegerField("Год")
     title = models.CharField("Название", max_length=200)
     place = models.CharField("Место", max_length=100)
+    city = models.CharField("Город", max_length=100)
+    country = models.CharField("Страна", max_length=100)
 
     class Meta:
         verbose_name = "выставка"
