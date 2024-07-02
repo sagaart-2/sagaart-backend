@@ -147,6 +147,22 @@ SSH_PASSPHRASE=<ssh key passphrase>
 http://158.160.142.238/swagger/
 ```
 
+## Тесты и покрытие
+
+Запустите тесты из корневой директории командой:
+
+  ```
+    python manage.py test apps
+  ```
+  или
+  ```
+    coverage run --source='.' manage.py test apps
+  ```
+
+Покрытие тестами составляет 83 процента.
+
+![Процент покрытия](.coverage.png)
+
 ## Команда разработки:
 
 ### Проджект-менеджер
