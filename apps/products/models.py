@@ -13,7 +13,7 @@ class Artist(models.Model):
     gender = models.CharField(
         "Пол", max_length=50, choices=choice_classes.GenderChoice.choices
     )
-    bio = models.TextField("Биография", blank=True, null=True)
+    bio = models.TextField("Биография", max_length=500, blank=True, null=True)
     photo = models.ImageField("Фото", upload_to="artist_images/")
     phone = models.CharField(
         "Телефон",
@@ -169,7 +169,7 @@ class ProductCard(models.Model):
     )
     photo = models.ImageField("Фото", upload_to="product_images/")
     title = models.CharField("Название", max_length=100)
-    description = models.TextField("Описание", max_length=200)
+    description = models.TextField("Описание", max_length=500)
     width = models.FloatField(verbose_name="ширина картины")
     height = models.FloatField(verbose_name="высота картины")
     genre = models.CharField("Жанр", max_length=100)
