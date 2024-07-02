@@ -43,7 +43,7 @@ class FavoriteArtistSerializer(serializers.ModelSerializer):
             "id",
             "name",
             "lastname",
-            #   "photo",
+            "photo",
             "country",
         )
 
@@ -83,10 +83,6 @@ class CreateCustomUserSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         """Представление пользователя."""
-        # serializer = CustomUserSerializer(
-        #     instance, context={"request": self.context.get("request")}
-        # )
-        # data = super().to_representation(instance)
         data = CustomUserSerializer(
             instance, context={"request": self.context.get("request")}
         ).data
@@ -116,8 +112,6 @@ class CreateCustomUserSerializer(serializers.ModelSerializer):
 
         style_ids = [style["id"] for style in favorite_styles]
         custom_user.favorite_style.set(style_ids)
-        # styles = Style.objects.filter(id__in=style_ids)
-        # custom_user.favorite_style.set(styles)
 
     @staticmethod
     def add_favorite_category(custom_user, favorite_categories):
@@ -125,8 +119,6 @@ class CreateCustomUserSerializer(serializers.ModelSerializer):
 
         category_ids = [category["id"] for category in favorite_categories]
         custom_user.favorite_category.set(category_ids)
-        # categories = Category.objects.filter(id__in=category_ids)
-        # custom_user.favorite_category.set(categories)
 
     @staticmethod
     def add_favorite_artist(custom_user, favorite_artists):
@@ -134,8 +126,6 @@ class CreateCustomUserSerializer(serializers.ModelSerializer):
 
         artist_ids = [artist["id"] for artist in favorite_artists]
         custom_user.favorite_artist.set(artist_ids)
-        # artists = Artist.objects.filter(id__in=artist_ids)
-        # custom_user.favorite_artist.set(artists)
 
     def update(self, instance, validated_data):
         """Редактировать профиль пользователя."""

@@ -65,11 +65,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         related_name="users_like",
         verbose_name="Любимые художники",
     )
-    # subscription = models.ManyToManyField(
-    #     Subscription,
-    #     related_name="users_like",
-    #     verbose_name="Подписки"
-    # )
     user_rights = models.CharField(
         "Права пользователя",
         max_length=50,
@@ -101,13 +96,3 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         """Строковое представление объекта пользователя."""
         return self.email
-
-    # @property
-    # def is_admin(self):
-    #     return self.user_rights == (
-    #         choice_classes.UserRightsChoice.ADMIN or self.is_staff
-    #     )
-
-    # @property
-    # def is_moderator(self):
-    #     return self.user_rights == choice_classes.UserRightsChoice.MODERATOR

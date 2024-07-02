@@ -1,5 +1,3 @@
-# import re
-
 import numpy as np
 from catboost import CatBoostRegressor
 from django.conf import settings
@@ -209,48 +207,19 @@ def preprocess(data: list) -> np.ndarray:
     )
 
 
-# def get_price(
-#     category: str,
-#     year: int,
-#     height: float,
-#     width: float,
-#     work_material: str,
-#     pad_material: str,
-#     count_title: int,
-#     count_artist: int,
-#     country: str,
-#     sex: str,
-#     solo_shows: str,
-#     group_shows: str,
-#     age: int,
-#     is_alive: int
-# )
-
-
 def get_price(data: list) -> float:
     """Получить цену картины."""
-    # data[6] = data[7] = data[-1] = np.NaN
-    # (
-    #     category, year, height, width, work_material,
-    #     pad_material, count_title, count_artist, country,
-    #     sex, solo_shows, group_shows, age, is_alive
-    # ) = data
+    # Так как в комментариях к данной ML-модели указано, что поля
+    # count_title, count_artist и is_alive пока будут иметь значение np.NaN,
+    # то присвоим это значение полям
+    data[6] = data[7] = data[-1] = np.NaN
+
     model = CatBoostRegressor().load_model(
         settings.CATBOOST_ROOT, format="json"
     )
-    # model = CatBoostRegressor().load_model(
-    #     "/home/vasnn/Dev/hakaton/sagaart-backend/catboost_v1.json",
-    #     format="json",
-    # )
+    # выдает предсказание цены
     price = np.clip(model.predict(preprocess(data)), 1000, np.inf)
     return round(price, 2)
-
-
-# model = CatBoostRegressor().load_model(settings.CATBOOST_ROOT, format="json")
-# model = CatBoostRegressor().load_model("/home/vasnn/Dev/hakaton/sagaart-backend/catboost_v1.json", format="json")
-# "/home/vasnn/Dev/hakaton/sagaart-backend/catboost_v1.json"
-# выберите путь до файла
-# print(np.clip(model.predict(preprocess(data)), 1000, np.inf)) # выдает предсказание цены
 
 
 # import requests

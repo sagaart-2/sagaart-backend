@@ -15,6 +15,7 @@ from apps.products.models import (
 @admin.register(Artist)
 class ArtistAdmin(admin.ModelAdmin):
     list_display = ("id", "lastname", "date_of_birth")
+    filter_horizontal = ("solo_shows", "group_shows")
     search_fields = ("lastname", "date_of_birth")
 
 
@@ -26,14 +27,14 @@ class ProductCardAdmin(admin.ModelAdmin):
 
 @admin.register(Style)
 class StyleAdmin(admin.ModelAdmin):
-    list_display = ("id", "name_style")
-    search_fields = ("id", "name_style")
+    list_display = ("id", "name")
+    search_fields = ("id", "name")
 
 
 @admin.register(Category)
 class Category(admin.ModelAdmin):
-    list_display = ("id", "name_category")
-    search_fields = ("id", "name_category")
+    list_display = ("id", "name")
+    search_fields = ("id", "name")
 
 
 @admin.register(Exhibition)
@@ -55,5 +56,6 @@ class GroupShowAdmin(ExhibitionAdmin):
 
 @admin.register(Bid)
 class BidAdmin(admin.ModelAdmin):
-    list_display = ("id", "product_card", "price")
-    search_fields = ("product_card",)
+    list_display = ("id", "title", "category", "price")
+    readonly_fields = ("price",)
+    search_fields = ("title",)
