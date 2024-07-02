@@ -171,7 +171,7 @@ class ProductCard(models.Model):
     title = models.CharField("Название", max_length=100)
     description = models.TextField("Описание", max_length=200)
     width = models.FloatField(verbose_name="ширина картины")
-    heigth = models.FloatField(verbose_name="высота картины")
+    height = models.FloatField(verbose_name="высота картины")
     genre = models.CharField("Жанр", max_length=100)
     style = models.ForeignKey(
         Style,
