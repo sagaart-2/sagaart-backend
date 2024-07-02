@@ -13,7 +13,7 @@
 ## Описание проекта "SAGAART"
 
 Проект «SAGAART» — онлайн-платформа для расчета
-стоимости и продажи арт-объектов.
+стоимости и продажи арт-объектов. API позволяет просматривать список пользователей, добавлять карточки товара и опубликовывать информацию по событиям для галерей.
 
 Проект можно посмотреть по адресу: http://158.160.142.238/api/v1/
 
@@ -144,5 +144,82 @@ SSH_PASSPHRASE=<ssh key passphrase>
 
 Подробную информацию по эндпоинтам API можно посмотреть по адресу:
 ```
-http://localhost/swagger/
+http://158.160.142.238/swagger/
 ```
+
+## Команда разработки:
+
+### Проджект-менеджер
+
+*Лисицын Антон*
+**telegram:** *@antony_lis*
+**github:** *Lisitsyn-AV*
+
+### Продакт-менеджер
+
+*Акопян Погос*
+**telegram:** *@pogo_s*
+**github:** *pogos-akopian*
+
+### UX/UI дизайнеры
+
+*Гапонов Виктор*
+**telegram:** *@way26ru*
+**github:** *Vik*
+
+*Ерёменко Татьяна*
+**telegram:** *@paintings_inspire*
+
+### Бизнес-аналитики
+
+*Гаврилова Анастасия*
+**telegram:** *@Tarasovna*
+**github:** *Nastya-Gavrilova*
+
+*Гахраманова Айна*
+**telegram:** *@fghtyvb*
+**github:** *aynaitsme*
+
+### Системные аналитики
+
+*Селиванова Ольга*
+**telegram:** *@Lelia7*
+**github:** *Olga9221555515*
+
+*Дергунова Мария*
+**telegram:** *@Dergunovamv*
+**github:** *marderg*
+
+*Лыков Илья*
+**telegram:** *@ilia_likov*
+**github:** *ilia.likov*
+
+*Мазитов Роберт*
+**telegram:** *@Mazitov47*
+**github:** *RobMaz47*
+
+### Frontend-разработчики
+
+*Парада Елизавета*
+**telegram:** *@ElizavetaParada*
+**github:** *Elizaveta-Parada*
+
+*Мильне Ольга*
+**telegram:** *@helgamilne*
+**github:** *HelgaMilne*
+
+### Backend-разработчики
+
+*Васин Никита*
+**telegram:** *@cskovec22*
+**github:** *cskovec22*
+
+*Лашков Павел*
+**telegram:** *@hutjinator*
+**github:** *hutji*
+
+### QA-инженер
+
+*Найгум Алексей*
+**telegram:** *@alekseynaigum*
+**github:** *AlekseyNaigum*
