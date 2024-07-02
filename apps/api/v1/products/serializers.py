@@ -1,8 +1,11 @@
-# from django.utils import timezone
+from datetime import datetime
+
 from rest_framework import serializers
 
-from apps.products.models import (  # Bid,
+from apps.api.v1.products import Paintings_v2
+from apps.products.models import (
     Artist,
+    Bid,
     Category,
     Exhibition,
     GroupShow,
@@ -10,8 +13,6 @@ from apps.products.models import (  # Bid,
     SoloShow,
     Style,
 )
-
-# from apps.api.v1.products import Paintings_v2
 
 
 class ExhibitionArtistSerializer(serializers.ModelSerializer):
@@ -46,12 +47,38 @@ class GroupShowSerializer(ExhibitionSerializer):
         fields = ExhibitionSerializer.Meta.fields
 
 
+class ArtistInProductCardSerializer(serializers.ModelSerializer):
+    """Сериализатор для отображения художника в карточке товара."""
+
+    class Meta:
+        model = Artist
+        fields = (
+            "id",
+            "name",
+            "lastname",
+            "photo",
+            "bio",
+            "date_of_birth",
+            "city_of_birth",
+            "country",
+            "city_of_residence",
+            "education",
+            "art_education",
+            "teaching_experience",
+            "personal_style",
+            "solo_shows",
+            "group_shows",
+            "collected_by_private_collectors",
+            "collected_by_major_institutions",
+            "industry_award",
+            "social",
+        )
+
+
 class ArtistSerializer(serializers.ModelSerializer):
     """Серилизатор для работы с объектом Artist."""
 
-    personal_style = serializers.CharField(source="get_personal_style_display")
-    # solo_shows = SoloShowSerializer(many=True, read_only=True)
-    # group_shows = GroupShowSerializer(many=True, read_only=True)
+    personal_style = serializers.CharField()
     solo_shows = ExhibitionArtistSerializer(many=True)
     group_shows = ExhibitionArtistSerializer(many=True)
     collected_by_private_collectors = serializers.BooleanField()
@@ -60,6 +87,7 @@ class ArtistSerializer(serializers.ModelSerializer):
     create_at = serializers.DateTimeField(
         format="%Y-%m-%dT%H:%M:%S.%fZ", read_only=True
     )
+    password = serializers.CharField(write_only=True)
 
     class Meta:
         model = Artist
@@ -89,7 +117,13 @@ class ArtistSerializer(serializers.ModelSerializer):
             "password",
             "create_at",
         )
-        extra_kwargs = {"password": {"write_only": True}}
+
+    def validate_date_of_birth(self, value):
+        if value > datetime.now().date():
+            raise serializers.ValidationError(
+                "Дата рождения не может быть больше текущей даты."
+            )
+        return value
 
     def to_representation(self, instance):
         """Представление пользователя."""
@@ -101,7 +135,6 @@ class ArtistSerializer(serializers.ModelSerializer):
         data["group_shows"] = GroupShowSerializer(
             instance.group_shows.all(), many=True
         ).data
-
         return data
 
     @staticmethod
@@ -152,6 +185,19 @@ class ArtistSerializer(serializers.ModelSerializer):
 
         artist.group_shows.set(group_shows_new)
 
+    def create(self, validated_data):
+        solo_shows_data = validated_data.pop("solo_shows")
+        group_shows_data = validated_data.pop("group_shows")
+        artist = Artist.objects.create(**validated_data)
+
+        if solo_shows_data:
+            self.add_solo_shows(artist, solo_shows_data)
+
+        if group_shows_data:
+            self.add_group_shows(artist, group_shows_data)
+
+        return artist
+
     def update(self, instance, validated_data):
         solo_shows_data = validated_data.pop("solo_shows", [])
         group_shows_data = validated_data.pop("group_shows", [])
@@ -181,7 +227,7 @@ class StyleSerializer(serializers.ModelSerializer):
         model = Style
         fields = (
             "id",
-            "name_style",
+            "name",
         )
 
 
@@ -192,7 +238,7 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = (
             "id",
-            "name_category",
+            "name",
         )
 
 
@@ -221,124 +267,141 @@ class ProductCardSerializer(serializers.ModelSerializer):
             "year_create",
             "avg_cost_of_work",
             "price",
-            "desired_price",
             "unique",
             "investment_attractiveness",
         )
 
+    def validate_year_create(self, value):
+        current_year = datetime.now().year
+        if value > current_year:
+            raise serializers.ValidationError(
+                "Год создания не может быть больше текущего года."
+            )
+        return value
 
-# class BidsSerializer(serializers.ModelSerializer):
-#     """Сериализатор для просмотра объекта Bid."""
-#     artist = ArtistSerializer()
-#     category = serializers.StringRelatedField()
-#     desired_price = serializers.DecimalField(
-#         max_digits=10,
-#         decimal_places=2,
-#         required=False
-#     )
+    def validate_price(self, value):
+        if value <= 0:
+            raise serializers.ValidationError("Цена должна быть больше 0.")
 
-#     class Meta:
-#         model = ProductCard
-#         fields = (
-#             "foto",
-#             "artist",
-#             "title",
-#             "description",
-#             "year_create",
-#             "width",
-#             "heigth",
-#             "material_work",
-#             "material_tablet",
-#             "category",
-#             "desired_price"
-#         )
+    def validate_width(self, value):
+        if value <= 0:
+            raise serializers.ValidationError(
+                "Ширина картины должна быть больше 0."
+            )
 
+    def validate_heigth(self, value):
+        if value <= 0:
+            raise serializers.ValidationError(
+                "Высота картины должна быть больше 0."
+            )
 
-# class CreateBidsSerializer(serializers.ModelSerializer):
-#     """Сериализатор для создания объекта Bid."""
-#     product_card = serializers.PrimaryKeyRelatedField(
-#         queryset=ProductCard.objects.select_related(
-#             "artist"
-#         ).prefetch_related(
-#             "category",
-#             "artist__solo_shows",
-#             "artist__group_shows"
-#         )
-#     )
-#     # product_card = serializers.PrimaryKeyRelatedField(
-#     #     queryset=ProductCard.objects.all()
-#     # )
-#     # product_card = serializers.IntegerField()
-
-#     class Meta:
-#         model = Bid
-#         fields = ("product_card",)
-
-#     def create(self, validated_data):
-#         # product_card = ProductCard.objects.select_related(
-#         #     "artist"
-#         # ).prefetch_related(
-#         #     "category",
-#         #     "artist__solo_shows",
-#         #     "artist__group_shows"
-#         # ).get(id=validated_data["product_card"].id)
-#         product_card = validated_data["product_card"]
-
-#         # count_title, count_artist и is_alive в ML-модели указаны, как np.NaN.
-#         # Поэтому приравняем к 0 сейчас.
-#         count_title = count_artist = is_alive = 0
-#         solo_shows_str = ", ".join(
-#             [show.name for show in product_card.artist.solo_shows.all()]
-#         )
-#         group_shows_str = ", ".join(
-#             [show.name for show in product_card.artist.group_shows.all()]
-#         )
-#         age = (
-#             timezone.now().date() - product_card.artist.date_of_birth
-#         ).days // 365
-#         data = [
-#             product_card.category.name_category,
-#             product_card.year_create,
-#             product_card.heigth,
-#             product_card.width,
-#             product_card.material_work,
-#             product_card.material_tablet,
-#             count_title,
-#             count_artist,
-#             product_card.artist.сity_of_residence,
-#             product_card.artist.gender,
-#             solo_shows_str,
-#             group_shows_str,
-#             age,
-#             is_alive
-#         ]
-
-#         price = Paintings_v2.get_price(data)
-#         bid = Bid.objects.create(
-#             product_card=product_card,
-#             price=price
-#         )
-#         return bid
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data["artist"] = ArtistInProductCardSerializer(instance.artist).data
+        return data
 
 
-class CreateBidsSerializer(serializers.Serializer):
-    """Сериализатор для получения цены."""
+class BidsSerializer(serializers.ModelSerializer):
+    """Сериализатор для просмотра объекта Bid."""
 
-    category = serializers.CharField()
-    year_create = serializers.IntegerField()
-    height = serializers.DecimalField(max_digits=10, decimal_places=2)
-    width = serializers.DecimalField(max_digits=10, decimal_places=2)
-    material_work = serializers.CharField()
-    material_tablet = serializers.CharField()
-    count_title = serializers.IntegerField()
-    count_artist = serializers.IntegerField()
-    country = serializers.CharField()
-    gender = serializers.CharField()
-    solo_shows = serializers.CharField()
-    group_shows = serializers.CharField()
-    age = serializers.IntegerField()
-    is_alive = serializers.BooleanField()
-    # foto = serializers.ImageField()
-    title = serializers.CharField()
-    artist_name = serializers.CharField()
-    artist_lastname = serializers.CharField()
+    class Meta:
+        model = Bid
+        fields = (
+            "id",
+            "photo",
+            "title",
+            "artist_name",
+            "artist_lastname",
+            "category",
+            "width",
+            "height",
+            "material_work",
+            "material_tablet",
+            "price",
+        )
+
+
+class CreateBidsSerializer(serializers.ModelSerializer):
+    """Сериализатор для создания объекта Bid."""
+
+    class Meta:
+        model = Bid
+        fields = (
+            "category",
+            "year_create",
+            "height",
+            "width",
+            "material_work",
+            "material_tablet",
+            "count_title",
+            "count_artist",
+            "country",
+            "gender",
+            "solo_shows",
+            "group_shows",
+            "age",
+            "is_alive",
+            "artist_name",
+            "artist_lastname",
+            "photo",
+            "title",
+            "price",
+        )
+        extra_kwargs = {"price": {"read_only": True}}
+
+    def validate_year_create(self, value):
+        current_year = datetime.now().year
+        if value > current_year:
+            raise serializers.ValidationError(
+                "Год создания не может быть больше текущего года."
+            )
+        return value
+
+    def validate_width(self, value):
+        if value <= 0:
+            raise serializers.ValidationError(
+                "Ширина картины должна быть больше 0."
+            )
+
+    def validate_heigth(self, value):
+        if value <= 0:
+            raise serializers.ValidationError(
+                "Высота картины должна быть больше 0."
+            )
+
+    def validate_age(self, value):
+        if value <= 0:
+            raise serializers.ValidationError("Возраст должен быть больше 0.")
+
+    def to_representation(self, instance):
+        data = BidsSerializer(
+            instance, context={"request": self.context.get("request")}
+        ).data
+        return data
+
+    def create(self, validated_data):
+        algorithm_fields = (
+            "category",
+            "year_create",
+            "height",
+            "width",
+            "material_work",
+            "material_tablet",
+            "count_title",
+            "count_artist",
+            "country",
+            "gender",
+            "solo_shows",
+            "group_shows",
+            "age",
+            "is_alive",
+        )
+
+        data = [validated_data.get(field) for field in algorithm_fields]
+        price = Paintings_v2.get_price(data)
+        if price <= 0:
+            raise serializers.ValidationError(
+                "Ошибка расчета цены! Цена должна быть больше 0."
+            )
+        bid = Bid.objects.create(price=price, **validated_data)
+        return bid
