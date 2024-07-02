@@ -14,7 +14,9 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost 127.0.0.1").split(" ")
+ALLOWED_HOSTS = os.getenv(
+    "DJANGO_ALLOWED_HOSTS", "localhost 127.0.0.1 158.160.142.238"
+).split(",")
 CSRF_TRUSTED_ORIGINS = os.environ["CSRF_TRUSTED_ORIGINS"].split(",")
 CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", "").split(" ")
 
@@ -123,10 +125,10 @@ USE_I18N = True
 USE_TZ = True
 
 
-MEDIA_URL = "media/"
+MEDIA_URL = "/backend_media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-STATIC_URL = "static/"
+STATIC_URL = "/backend_static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 
