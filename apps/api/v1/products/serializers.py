@@ -307,7 +307,7 @@ class CreateBidsSerializer(serializers.ModelSerializer):
 
     year_create = serializers.IntegerField(validators=[validate_year_create])
     width = serializers.FloatField(validators=[validate_width])
-    heigth = serializers.FloatField(validators=[validate_heigth])
+    height = serializers.FloatField(validators=[validate_heigth])
     age = serializers.IntegerField(validators=[validate_age])
 
     class Meta:
