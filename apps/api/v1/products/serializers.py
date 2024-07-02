@@ -1,8 +1,14 @@
-from datetime import datetime
-
 from rest_framework import serializers
 
 from apps.api.v1.products import Paintings_v2
+from apps.api.v1.products.validators import (
+    validate_age,
+    validate_date_of_birth,
+    validate_heigth,
+    validate_price,
+    validate_width,
+    validate_year_create,
+)
 from apps.products.models import (
     Artist,
     Bid,
@@ -83,7 +89,7 @@ class ArtistSerializer(serializers.ModelSerializer):
     group_shows = ExhibitionArtistSerializer(many=True)
     collected_by_private_collectors = serializers.BooleanField()
     collected_by_major_institutions = serializers.BooleanField()
-    date_of_birth = serializers.DateField()
+    date_of_birth = serializers.DateField(validators=[validate_date_of_birth])
     create_at = serializers.DateTimeField(
         format="%Y-%m-%dT%H:%M:%S.%fZ", read_only=True
     )
@@ -117,13 +123,6 @@ class ArtistSerializer(serializers.ModelSerializer):
             "password",
             "create_at",
         )
-
-    def validate_date_of_birth(self, value):
-        if value > datetime.now().date():
-            raise serializers.ValidationError(
-                "Дата рождения не может быть больше текущей даты."
-            )
-        return value
 
     def to_representation(self, instance):
         """Представление пользователя."""
@@ -248,6 +247,12 @@ class ProductCardSerializer(serializers.ModelSerializer):
     artist = ArtistSerializer()
     category = CategorySerializer()
     style = StyleSerializer()
+    year_create = serializers.IntegerField(validators=[validate_year_create])
+    price = serializers.DecimalField(
+        max_digits=10, decimal_places=2, validators=[validate_price]
+    )
+    width = serializers.FloatField(validators=[validate_width])
+    heigth = serializers.FloatField(validators=[validate_heigth])
 
     class Meta:
         model = ProductCard
@@ -270,30 +275,6 @@ class ProductCardSerializer(serializers.ModelSerializer):
             "unique",
             "investment_attractiveness",
         )
-
-    def validate_year_create(self, value):
-        current_year = datetime.now().year
-        if value > current_year:
-            raise serializers.ValidationError(
-                "Год создания не может быть больше текущего года."
-            )
-        return value
-
-    def validate_price(self, value):
-        if value <= 0:
-            raise serializers.ValidationError("Цена должна быть больше 0.")
-
-    def validate_width(self, value):
-        if value <= 0:
-            raise serializers.ValidationError(
-                "Ширина картины должна быть больше 0."
-            )
-
-    def validate_heigth(self, value):
-        if value <= 0:
-            raise serializers.ValidationError(
-                "Высота картины должна быть больше 0."
-            )
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
@@ -324,6 +305,11 @@ class BidsSerializer(serializers.ModelSerializer):
 class CreateBidsSerializer(serializers.ModelSerializer):
     """Сериализатор для создания объекта Bid."""
 
+    year_create = serializers.IntegerField(validators=[validate_year_create])
+    width = serializers.FloatField(validators=[validate_width])
+    heigth = serializers.FloatField(validators=[validate_heigth])
+    age = serializers.IntegerField(validators=[validate_age])
+
     class Meta:
         model = Bid
         fields = (
@@ -348,30 +334,6 @@ class CreateBidsSerializer(serializers.ModelSerializer):
             "price",
         )
         extra_kwargs = {"price": {"read_only": True}}
-
-    def validate_year_create(self, value):
-        current_year = datetime.now().year
-        if value > current_year:
-            raise serializers.ValidationError(
-                "Год создания не может быть больше текущего года."
-            )
-        return value
-
-    def validate_width(self, value):
-        if value <= 0:
-            raise serializers.ValidationError(
-                "Ширина картины должна быть больше 0."
-            )
-
-    def validate_heigth(self, value):
-        if value <= 0:
-            raise serializers.ValidationError(
-                "Высота картины должна быть больше 0."
-            )
-
-    def validate_age(self, value):
-        if value <= 0:
-            raise serializers.ValidationError("Возраст должен быть больше 0.")
 
     def to_representation(self, instance):
         data = BidsSerializer(
