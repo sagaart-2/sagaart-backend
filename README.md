@@ -151,75 +151,75 @@ http://158.160.142.238/swagger/
 
 ### Проджект-менеджер
 
-*Лисицын Антон*
-**telegram:** *@antony_lis*
-**github:** *Lisitsyn-AV*
+*Лисицын Антон*  
+**telegram:** [*@antony_lis*](https://t.me/antony_lis)  
+**github:** [*Lisitsyn-AV*](https://github.com/Lisitsyn-AV) 
 
 ### Продакт-менеджер
 
-*Акопян Погос*
-**telegram:** *@pogo_s*
-**github:** *pogos-akopian*
+*Акопян Погос*  
+**telegram:** [*@pogo_s*](https://t.me/pogo_s)  
+**github:** [*pogos-akopian* ](https://github.com/pogos-akopian)  
 
 ### UX/UI дизайнеры
 
-*Гапонов Виктор*
-**telegram:** *@way26ru*
-**github:** *Vik*
+*Гапонов Виктор*  
+**telegram:** [*@way26ru*](https://t.me/way26ru)  
+**github:** [*Vik*](https://github.com/Vik)  
 
-*Ерёменко Татьяна*
-**telegram:** *@paintings_inspire*
+*Ерёменко Татьяна*  
+**telegram:** [*@paintings_inspire*](https://t.me/paintings_inspire)  
 
 ### Бизнес-аналитики
 
-*Гаврилова Анастасия*
-**telegram:** *@Tarasovna*
-**github:** *Nastya-Gavrilova*
+*Гаврилова Анастасия*  
+**telegram:** [*@Tarasovna*](https://t.me/Tarasovna)  
+**github:** [*Nastya-Gavrilova*](https://github.com/Nastya-Gavrilova)  
 
-*Гахраманова Айна*
-**telegram:** *@fghtyvb*
-**github:** *aynaitsme*
+*Гахраманова Айна*  
+**telegram:** [*@fghtyvb*](https://t.me/fghtyvb)  
+**github:** [*aynaitsme*](https://github.com/aynaitsme)  
 
 ### Системные аналитики
 
-*Селиванова Ольга*
-**telegram:** *@Lelia7*
-**github:** *Olga9221555515*
+*Селиванова Ольга*  
+**telegram:** [*@Lelia7*](https://t.me/Lelia7)  
+**github:** [*Olga9221555515*](https://github.com/Olga9221555515)  
 
-*Дергунова Мария*
-**telegram:** *@Dergunovamv*
-**github:** *marderg*
+*Дергунова Мария*  
+**telegram:** [*@Dergunovamv*](https://t.me/Dergunovamv)  
+**github:** [*marderg*](https://github.com/marderg)  
 
-*Лыков Илья*
-**telegram:** *@ilia_likov*
-**github:** *ilia.likov*
+*Лыков Илья*  
+**telegram:** [*@ilia_likov*](https://t.me/ilia_likov)  
+**github:** [*ilia.likov*](https://github.com/ilia.likov)  
 
-*Мазитов Роберт*
-**telegram:** *@Mazitov47*
-**github:** *RobMaz47*
+*Мазитов Роберт*  
+**telegram:** [*@Mazitov47*](https://t.me/Mazitov47)  
+**github:** [*RobMaz47*](https://github.com/RobMaz47)  
 
 ### Frontend-разработчики
 
-*Парада Елизавета*
-**telegram:** *@ElizavetaParada*
-**github:** *Elizaveta-Parada*
+*Парада Елизавета*  
+**telegram:** [*@ElizavetaParada*](https://t.me/ElizavetaParada)  
+**github:** [*Elizaveta-Parada*](https://github.com/Elizaveta-Parada)  
 
-*Мильне Ольга*
-**telegram:** *@helgamilne*
-**github:** *HelgaMilne*
+*Мильне Ольга*  
+**telegram:** [*@helgamilne*](https://t.me/helgamilne)  
+**github:** [*HelgaMilne*](https://github.com/HelgaMilne)  
 
 ### Backend-разработчики
 
-*Васин Никита*
-**telegram:** *@cskovec22*
-**github:** *cskovec22*
+*Васин Никита*  
+**telegram:** [*@cskovec22*](https://t.me/cskovec22)  
+**github:** [*cskovec22*](https://github.com/cskovec22)  
 
-*Лашков Павел*
-**telegram:** *@hutjinator*
-**github:** *hutji*
+*Лашков Павел*  
+**telegram:** [*@hutjinator*](https://t.me/hutjinator)  
+**github:** [*hutji*](https://github.com/hutji)  
 
 ### QA-инженер
 
-*Найгум Алексей*
-**telegram:** *@alekseynaigum*
-**github:** *AlekseyNaigum*
+*Найгум Алексей*  
+**telegram:** [*@alekseynaigum*](https://t.me/alekseynaigum)  
+**github:** [*AlekseyNaigum*](https://github.com/AlekseyNaigum)  
