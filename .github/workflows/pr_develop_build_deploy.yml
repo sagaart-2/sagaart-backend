@@ -61,5 +61,5 @@ jobs:
         passphrase: ${{ secrets.SSH_PASSPHRASE }}
         script: |
           cd /home/workshop/sagaart-backend/infra
-          docker compose -f docker-compose.yml down
-          docker compose -f docker-compose.yml up
+          sudo docker compose -f docker-compose.yml down
+          sudo docker compose -f docker-compose.yml up
