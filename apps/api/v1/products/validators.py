@@ -36,7 +36,7 @@ def validate_width(value):
         )
 
 
-def validate_heigth(value):
+def validate_height(value):
     """Валидация значения поля высоты картины."""
     if value <= 0:
         raise serializers.ValidationError(

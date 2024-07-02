@@ -4,7 +4,7 @@ from apps.api.v1.products import Paintings_v2
 from apps.api.v1.products.validators import (
     validate_age,
     validate_date_of_birth,
-    validate_heigth,
+    validate_height,
     validate_price,
     validate_width,
     validate_year_create,
@@ -252,7 +252,7 @@ class ProductCardSerializer(serializers.ModelSerializer):
         max_digits=10, decimal_places=2, validators=[validate_price]
     )
     width = serializers.FloatField(validators=[validate_width])
-    heigth = serializers.FloatField(validators=[validate_heigth])
+    height = serializers.FloatField(validators=[validate_height])
 
     class Meta:
         model = ProductCard
@@ -265,7 +265,7 @@ class ProductCardSerializer(serializers.ModelSerializer):
             "style",
             "category",
             "width",
-            "heigth",
+            "height",
             "genre",
             "material_work",
             "material_tablet",
@@ -307,7 +307,7 @@ class CreateBidsSerializer(serializers.ModelSerializer):
 
     year_create = serializers.IntegerField(validators=[validate_year_create])
     width = serializers.FloatField(validators=[validate_width])
-    heigth = serializers.FloatField(validators=[validate_heigth])
+    height = serializers.FloatField(validators=[validate_height])
     age = serializers.IntegerField(validators=[validate_age])
 
     class Meta:
