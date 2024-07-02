@@ -82,6 +82,49 @@ python manage.py runserver
 http://127.0.0.1:8000/swagger/
 ```
 
+## Запуск в контейнерах
+
+Запустите контейнеры следующей командой:
+  ```
+    docker compose up -d
+  ```
+
+Выполните миграции:
+  ```
+    docker compose exec backend python manage.py makemigrations
+    docker compose exec backend python manage.py migrate
+  ```
+
+Создайте суперпользователя:
+  ```
+    docker compose exec backend python manage.py createsuperuser
+  ```
+
+Зайти в админ-панель:
+[Admin](http://127.0.0.1:8000/admin/)
+
+Посмотреть документацию:
+[Swagger](http://127.0.0.1:8000/swagger/)
+
+## CI/CD
+### Описание и настройка
+
+- при пуше в любую ветку запускаются тесты
+- при мёрдже PR в ветки `develop` проект запускается на удалённом сервере
+
+Для корректной работы CI/CD необходимо создать секретные переменные репозитория
+(Repository secrets):
+```text
+DOCKER_USERNAME=<docker_username>
+DOCKER_PASSWORD=<docker_password>
+
+SERVER_HOST=<server_pub_ip>
+SERVER_USER=<username>
+
+SSH_KEY=<--BEGIN OPENSSH PRIVATE KEY--...--END OPENSSH PRIVATE KEY--> # cat ~/.ssh/id_rsa
+SSH_PASSPHRASE=<ssh key passphrase>
+```
+
 ## Список эндпоинтов API:
 
 - /api/v1/users/ - список пользователей
