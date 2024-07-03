@@ -278,7 +278,11 @@ class ProductCardSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        data["artist"] = ArtistInProductCardSerializer(instance.artist).data
+        # Передаем request в Художника для отображения абсолютного адреса фото
+        request = self.context["request"]
+        data["artist"] = ArtistInProductCardSerializer(
+            instance.artist, context={"request": request}
+        ).data
         return data
 
 
