@@ -25,6 +25,11 @@ class ProductCardViewSet(CreateListPartialUpdateRetrieve):
     )
     serializer_class = ProductCardSerializer
 
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context["request"] = self.request
+        return context
+
 
 class StyleViewSet(ListRetrieveDelete):
     """Вьюсет для обработки запросов к эндпоинтам Style."""
