@@ -30,6 +30,12 @@ services:
     depends_on:
       - sagaart2-db
 
+  frontend:
+    image: username/image_name:latest
+    container_name: frontend
+    volumes:
+      - frontend_static:/app/build
+
   nginx:
     image: nginx:alpine
     container_name: nginx
@@ -43,8 +49,10 @@ services:
       - backend_media:/var/html/media
     depends_on:
       - backend
+      - frontend
 
 volumes:
   db_data:
   backend_static:
   backend_media:
+  frontend_static:
