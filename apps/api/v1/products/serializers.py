@@ -53,34 +53,6 @@ class GroupShowSerializer(ExhibitionSerializer):
         fields = ExhibitionSerializer.Meta.fields
 
 
-class ArtistInProductCardSerializer(serializers.ModelSerializer):
-    """Сериализатор для отображения художника в карточке товара."""
-
-    class Meta:
-        model = Artist
-        fields = (
-            "id",
-            "name",
-            "lastname",
-            "photo",
-            "bio",
-            "date_of_birth",
-            "city_of_birth",
-            "country",
-            "city_of_residence",
-            "education",
-            "art_education",
-            "teaching_experience",
-            "personal_style",
-            "solo_shows",
-            "group_shows",
-            "collected_by_private_collectors",
-            "collected_by_major_institutions",
-            "industry_award",
-            "social",
-        )
-
-
 class ArtistSerializer(serializers.ModelSerializer):
     """Серилизатор для работы с объектом Artist."""
 
@@ -217,6 +189,34 @@ class ArtistSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
+
+
+class ArtistInProductCardSerializer(ArtistSerializer):
+    """Сериализатор для отображения художника в карточке товара."""
+
+    class Meta:
+        model = Artist
+        fields = (
+            "id",
+            "name",
+            "lastname",
+            "photo",
+            "bio",
+            "date_of_birth",
+            "city_of_birth",
+            "country",
+            "city_of_residence",
+            "education",
+            "art_education",
+            "teaching_experience",
+            "personal_style",
+            "solo_shows",
+            "group_shows",
+            "collected_by_private_collectors",
+            "collected_by_major_institutions",
+            "industry_award",
+            "social",
+        )
 
 
 class StyleSerializer(serializers.ModelSerializer):
