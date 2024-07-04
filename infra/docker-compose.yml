@@ -31,7 +31,7 @@ services:
       - sagaart2-db
 
   frontend:
-    image: username/image_name:latest
+    image: hutji/sagaart-frontend::latest
     container_name: frontend
     volumes:
       - frontend_static:/app/build
@@ -46,7 +46,7 @@ services:
     volumes:
       - ./nginx/templates:/etc/nginx/templates
       - backend_static:/var/html/static
-      - backend_media:/var/html/media
+      - backend_media:/var/html/backend_media
     depends_on:
       - backend
       - frontend
