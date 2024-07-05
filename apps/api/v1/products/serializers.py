@@ -66,6 +66,7 @@ class ArtistSerializer(serializers.ModelSerializer):
         format="%Y-%m-%dT%H:%M:%S.%fZ", read_only=True
     )
     password = serializers.CharField(write_only=True)
+    works = serializers.SerializerMethodField()
 
     class Meta:
         model = Artist
@@ -94,7 +95,15 @@ class ArtistSerializer(serializers.ModelSerializer):
             "social",
             "password",
             "create_at",
+            "works",
         )
+
+    def get_works(self, obj):
+        request = self.context.get("request")
+        works = ProductCard.objects.filter(artist=obj)
+        return WorksArtistProductCardSerializer(
+            works, context={"request": request}, many=True
+        ).data
 
     def to_representation(self, instance):
         """Представление пользователя."""
@@ -216,6 +225,7 @@ class ArtistInProductCardSerializer(ArtistSerializer):
             "collected_by_major_institutions",
             "industry_award",
             "social",
+            "works",
         )
 
 
@@ -279,11 +289,34 @@ class ProductCardSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         data = super().to_representation(instance)
         # Передаем request в Художника для отображения абсолютного адреса фото
-        request = self.context["request"]
+        request = self.context.get("request")
         data["artist"] = ArtistInProductCardSerializer(
             instance.artist, context={"request": request}
         ).data
         return data
+
+
+class WorksArtistProductCardSerializer(serializers.ModelSerializer):
+    """Сериализатор для отображения работ художника в карточке товара."""
+
+    category = CategorySerializer()
+    style = StyleSerializer()
+
+    class Meta:
+        model = ProductCard
+        fields = (
+            "id",
+            "photo",
+            "title",
+            "category",
+            "style",
+            "genre",
+            "width",
+            "height",
+            "material_work",
+            "material_tablet",
+            "price",
+        )
 
 
 class BidsSerializer(serializers.ModelSerializer):
