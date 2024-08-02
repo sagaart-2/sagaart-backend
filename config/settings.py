@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -34,6 +35,7 @@ LOCAL_APPS = [
     "drf_yasg",
     "rest_framework",
     "corsheaders",
+    "rest_framework_simplejwt",
 ]
 
 THIRD_PARTY_APPS = [
@@ -78,6 +80,13 @@ TEMPLATES = [
 WSGI_APPLICATION = "config.wsgi.application"
 
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
+
 DATABASES = {
     "default": {
         "ENGINE": os.getenv("DB_ENGINE"),
@@ -119,7 +128,7 @@ USE_I18N = True
 USE_TZ = True
 
 
-MEDIA_URL = "/backend_media/"
+MEDIA_URL = "media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 STATIC_URL = "/backend_static/"
@@ -131,3 +140,16 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "users.CustomUser"
 
 CATBOOST_ROOT = BASE_DIR / "catboost_v1.json"
+
+ONE_WEEK_IN_SECONDS = 604800
+
+SIMPLE_JWT = {
+    "AUTH_HEADER_TYPES": ("Bearer",),
+    "ACCESS_TOKEN_LIFETIME": timedelta(
+        seconds=int(os.getenv("ACCESS_TOKEN_LIFETIME", ONE_WEEK_IN_SECONDS))
+    ),
+    "REFRESH_TOKEN_LIFETIME": timedelta(
+        seconds=int(os.getenv("REFRESH_TOKEN_LIFETIME", ONE_WEEK_IN_SECONDS))
+    ),
+    "ROTATE_REFRESH_TOKENS": True,
+}

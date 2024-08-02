@@ -2,7 +2,7 @@ name: sagaart-2
 
 services:
   sagaart2-db:
-    image: postgres:latest
+    image: postgres:16.1-alpine
     container_name: sagaart2-db
     env_file:
       - ../.env
@@ -25,7 +25,7 @@ services:
     env_file:
       - ../.env
     volumes:
-      - backend_static:/app/static/
+      - backend_static:/backend_static/
       - backend_media:/app/media/
     depends_on:
       - sagaart2-db
@@ -33,6 +33,13 @@ services:
   frontend:
     image: hutji/sagaart-frontend::latest
     container_name: frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXTAUTH_SECRET=supersecret
+      - NEXTAUTH_URL=http://158.160.142.238
+      - NEXT_PUBLIC_BASE_URL=http://158.160.142.238/api/
+      - BACKEND_URL=http://158.160.142.238/api/v1
     volumes:
       - frontend_static:/app/build
 
@@ -46,7 +53,7 @@ services:
     volumes:
       - ./nginx/templates:/etc/nginx/templates
       - backend_static:/var/html/static
-      - backend_media:/var/html/backend_media
+      - backend_media:/var/html/media
     depends_on:
       - backend
       - frontend
