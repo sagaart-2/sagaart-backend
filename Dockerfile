@@ -10,7 +10,7 @@ RUN pip3 install -r /app/requirements.txt --no-cache-dir
 
 COPY . .
 
-RUN mkdir -p /backend_static/static
+RUN mkdir -p /static/static
 
 COPY entrypoint.sh .
 
