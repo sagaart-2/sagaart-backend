@@ -18,28 +18,25 @@ services:
     command: >
       sh -c "python manage.py migrate &&
              python manage.py createsuperuser --no-input || true &&
-             python manage.py collectstatic --no-input --clear &&
-             python manage.py runserver 0.0.0.0:8000"
-    ports:
-      - "8000:8000"
+             python manage.py collectstatic --no-input --clear &&"
     env_file:
       - ../.env
     volumes:
-      - backend_static:/backend_static/
+      - backend_static:/app/static/
       - backend_media:/app/media/
     depends_on:
       - sagaart2-db
 
   frontend:
-    image: hutji/sagaart-frontend::latest
+    image: hutji/sagaart-frontend:latest
     container_name: frontend
     ports:
       - "3000:3000"
     environment:
       - NEXTAUTH_SECRET=supersecret
-      - NEXTAUTH_URL=http://158.160.142.238
-      - NEXT_PUBLIC_BASE_URL=http://158.160.142.238/api/
-      - BACKEND_URL=http://158.160.142.238/api/v1
+      - NEXTAUTH_URL=http://147.45.175.103
+      - NEXT_PUBLIC_BASE_URL=http://147.45.175.103/api/
+      - BACKEND_URL=http://147.45.175.103/api/v1
     volumes:
       - frontend_static:/app/build
 
@@ -47,13 +44,11 @@ services:
     image: nginx:alpine
     container_name: nginx
     ports:
-      - "8080:80"
-    environment:
-      - NGINX_PORT=80
+      - "8000:80"
     volumes:
-      - ./nginx/templates:/etc/nginx/templates
-      - backend_static:/var/html/static
-      - backend_media:/var/html/media
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - backend_static:/var/html/static/
+      - backend_media:/var/html/media/
     depends_on:
       - backend
       - frontend
